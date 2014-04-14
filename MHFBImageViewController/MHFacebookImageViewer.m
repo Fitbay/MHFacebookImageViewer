@@ -87,7 +87,7 @@ static const CGFloat kMinImageScale = 1.0f;
         if(!__imageView){
             __imageView = [[UIImageView alloc]init];
             [__scrollView addSubview:__imageView];
-            __imageView.contentMode = UIViewContentModeScaleAspectFill;
+            __imageView.contentMode = UIViewContentModeScaleAspectFit;
         }
         __block UIImageView * _imageViewInTheBlock = __imageView;
         __block MHFacebookImageViewerCell * _justMeInsideTheBlock = self;
