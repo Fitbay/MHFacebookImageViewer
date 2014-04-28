@@ -226,6 +226,9 @@ static const int kNumberOfPrefetches = 3;
         CGFloat screenHeight =  [[UIScreen mainScreen] bounds].size.height;
         CGFloat imageYCenterPosition = __imageView.frame.origin.y + __imageView.frame.size.height/2 ;
         BOOL isGoingUp =  imageYCenterPosition < screenHeight/2;
+        if(_imageIndex!=_initialIndex){
+            _senderView.alpha = 1.0f;
+        }
         [UIView animateWithDuration:0.2f delay:0.0f options:0 animations:^{
             if(_imageIndex==_initialIndex){
                 __imageView.frame = _originalFrameRelativeToScreen;
