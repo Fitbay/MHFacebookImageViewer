@@ -24,10 +24,13 @@
 
 
 #import "MHFacebookImageViewer.h"
+#import "SDWebImagePrefetcher.h"
 #import <SDWebImage/UIImageView+WebCache.h>
 static const CGFloat kMinBlackMaskAlpha = 0.3f;
 static const CGFloat kMaxImageScale = 2.5f;
 static const CGFloat kMinImageScale = 1.0f;
+
+static const int kNumberOfPrefetches = 3;
 
 @interface MHFacebookImageViewerCell : UITableViewCell<UIGestureRecognizerDelegate,UIScrollViewDelegate>{
     UIImageView * __imageView;
@@ -487,6 +490,13 @@ static BOOL __usesDoneButtonByDefault = NO;
         [imageViewerCell setImageURL:_imageURL defaultImage:_senderView.image imageIndex:0];
     } else {
         [imageViewerCell setImageURL:[self.imageDatasource imageURLAtIndex:indexPath.row imageViewer:self] defaultImage:[self.imageDatasource imageDefaultAtIndex:indexPath.row imageViewer:self]imageIndex:indexPath.row];
+        NSMutableArray *prefetchURLs = [NSMutableArray array];
+        for(int row =indexPath.row+1; row <MIN([self.imageDatasource numberImagesForImageViewer:self],indexPath.row+ kNumberOfPrefetches +1); row++){
+            [prefetchURLs addObject:[self.imageDatasource imageURLAtIndex:row imageViewer:self]];
+        }
+
+        [[SDWebImagePrefetcher sharedImagePrefetcher] prefetchURLs:prefetchURLs];
+
     }
     return imageViewerCell;
 }
