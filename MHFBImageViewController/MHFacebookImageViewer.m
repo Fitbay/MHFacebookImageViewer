@@ -695,5 +695,9 @@ static BOOL __usesDoneButtonByDefault = NO;
     }
 }
 
+- (BOOL)prefersStatusBarHidden{
+    return YES;
+}
+
 @end
 
