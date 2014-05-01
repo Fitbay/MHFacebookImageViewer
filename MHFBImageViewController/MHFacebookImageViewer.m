@@ -67,7 +67,18 @@ static const int kNumberOfPrefetches = 3;
 
 @end
 
+@interface MHFacebookImageViewerCell ()
+@property(nonatomic, strong) UIActivityIndicatorView *activityIndicatorView;
+@end
+
 @implementation MHFacebookImageViewerCell
+
+- (instancetype)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier {
+    if (!(self = [super initWithStyle:style reuseIdentifier:reuseIdentifier])) return nil;
+    self.activityIndicatorView = [UIActivityIndicatorView new];
+    return self;
+}
+
 
 - (void) loadAllRequiredViews{
     self.selectionStyle = UITableViewCellSelectionStyleNone;
@@ -92,20 +103,26 @@ static const int kNumberOfPrefetches = 3;
             [__scrollView addSubview:__imageView];
             __imageView.contentMode = UIViewContentModeScaleAspectFit;
         }
+        [__imageView addSubview:self.activityIndicatorView];
+        self.activityIndicatorView.frame = __imageView.bounds;
+        [self.activityIndicatorView startAnimating];
+
         __block UIImageView * _imageViewInTheBlock = __imageView;
         __block MHFacebookImageViewerCell * _justMeInsideTheBlock = self;
         __block UIScrollView * _scrollViewInsideBlock = __scrollView;
-        
+
+        __weak MHFacebookImageViewerCell * weakSelf = self;
 		[__imageView setImageWithURL:imageURL placeholderImage:defaultImage options:SDWebImageRetryFailed completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType) {
 			if (error) {
 				NSLog(@"Image From URL Not loaded");
 				return;
 			}
+            [weakSelf.activityIndicatorView removeFromSuperview];
 			[_scrollViewInsideBlock setZoomScale:1.0f animated:YES];
             [_imageViewInTheBlock setImage:image];
             _imageViewInTheBlock.frame = [_justMeInsideTheBlock centerFrameFromImage:_imageViewInTheBlock.image];
 		}];
-        
+
         if(_imageIndex==_initialIndex && !_isLoaded){
             __imageView.frame = _originalFrameRelativeToScreen;
             [UIView animateWithDuration:0.4f delay:0.0f options:0 animations:^{
@@ -126,6 +143,8 @@ static const int kNumberOfPrefetches = 3;
             }];
             
         }
+        self.activityIndicatorView.frame = __imageView.bounds;
+        self.activityIndicatorView.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
         __imageView.userInteractionEnabled = YES;
         [self addPanGestureToView:__imageView];
         [self addMultipleGesture];
