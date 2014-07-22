@@ -105,8 +105,9 @@ static const int kNumberOfPrefetches = 3;
         }
         [__imageView addSubview:self.activityIndicatorView];
         self.activityIndicatorView.frame = __imageView.bounds;
-        [self.activityIndicatorView startAnimating];
-
+        if(imageURL)
+            [self.activityIndicatorView startAnimating];
+        
         __block UIImageView * _imageViewInTheBlock = __imageView;
         __block MHFacebookImageViewerCell * _justMeInsideTheBlock = self;
         __block UIScrollView * _scrollViewInsideBlock = __scrollView;
