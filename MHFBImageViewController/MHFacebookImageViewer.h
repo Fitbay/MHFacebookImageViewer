@@ -41,8 +41,8 @@ typedef void (^MHFacebookImageViewerClosingBlock)(void);
 @property (weak, readonly, nonatomic) UIViewController *rootViewController;
 @property (nonatomic,strong) NSURL * imageURL;
 @property (nonatomic,strong) UIImageView * senderView;
-@property (nonatomic,weak) MHFacebookImageViewerOpeningBlock openingBlock;
-@property (nonatomic,weak) MHFacebookImageViewerClosingBlock closingBlock;
+@property (nonatomic,strong) MHFacebookImageViewerOpeningBlock openingBlock;
+@property (nonatomic,strong) MHFacebookImageViewerClosingBlock closingBlock;
 @property (nonatomic,weak) id<MHFacebookImageViewerDatasource> imageDatasource;
 @property (nonatomic,assign) NSInteger initialIndex;
 @property (nonatomic,assign) BOOL usesDoneButton;
@@ -56,6 +56,9 @@ typedef void (^MHFacebookImageViewerClosingBlock)(void);
 @interface UIImageView(MHFacebookImageViewer)
 - (void) setupImageViewer;
 - (void) setupImageViewerWithCompletionOnOpen:(MHFacebookImageViewerOpeningBlock)open onClose:(MHFacebookImageViewerClosingBlock)close;
+
+- (void)showImageViewerImmediatelyWithCompletionOnOpen:(MHFacebookImageViewerOpeningBlock)open onClose:(MHFacebookImageViewerClosingBlock)close;
+
 - (void) setupImageViewerWithImageURL:(NSURL*)url;
 - (void) setupImageViewerWithImageURL:(NSURL *)url onOpen:(MHFacebookImageViewerOpeningBlock)open onClose:(MHFacebookImageViewerClosingBlock)close;
 - (void) setupImageViewerWithDatasource:(id<MHFacebookImageViewerDatasource>)imageDatasource onOpen:(MHFacebookImageViewerOpeningBlock)open onClose:(MHFacebookImageViewerClosingBlock)close;

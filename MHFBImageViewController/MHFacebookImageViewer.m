@@ -55,8 +55,8 @@ static const int kNumberOfPrefetches = 3;
 @property(nonatomic,weak) UIImage * defaultImage;
 @property(nonatomic,assign) NSInteger initialIndex;
 
-@property (nonatomic,weak) MHFacebookImageViewerOpeningBlock openingBlock;
-@property (nonatomic,weak) MHFacebookImageViewerClosingBlock closingBlock;
+@property (nonatomic,strong) MHFacebookImageViewerOpeningBlock openingBlock;
+@property (nonatomic,strong) MHFacebookImageViewerClosingBlock closingBlock;
 
 @property(nonatomic,weak) UIView * superView;
 
@@ -636,10 +636,12 @@ static BOOL __usesDoneButtonByDefault = NO;
 @synthesize imageDatasource;
 @end
 
-@interface UIImageView()<UITabBarControllerDelegate>
+@interface UIImageView ()<UITabBarControllerDelegate>
 
 @end
 #pragma mark - UIImageView Category
+
+
 @implementation UIImageView (MHFacebookImageViewer)
 
 #pragma mark - Initializer for UIImageView
@@ -649,6 +651,16 @@ static BOOL __usesDoneButtonByDefault = NO;
 
 - (void) setupImageViewerWithCompletionOnOpen:(MHFacebookImageViewerOpeningBlock)open onClose:(MHFacebookImageViewerClosingBlock)close {
     [self setupImageViewerWithImageURL:nil onOpen:open onClose:close];
+}
+
+- (void) showImageViewerImmediatelyWithCompletionOnOpen:(MHFacebookImageViewerOpeningBlock)open onClose:(MHFacebookImageViewerClosingBlock)close {
+    MHFacebookImageViewer * imageBrowser = [[MHFacebookImageViewer alloc]init];
+    imageBrowser.senderView = self;
+    imageBrowser.openingBlock = open;
+    imageBrowser.closingBlock = close;
+    imageBrowser.initialIndex = 0;
+    if(self.image)
+        [imageBrowser presentFromRootViewController];
 }
 
 - (void) setupImageViewerWithImageURL:(NSURL*)url {
